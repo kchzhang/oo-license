@@ -25,11 +25,11 @@ ARG tag=v${PRODUCT_VERSION}.${BUILD_NUMBER}
 RUN git clone --quiet --branch $tag --depth 1 https://github.com/ONLYOFFICE/build_tools.git /build/build_tools
 RUN git clone --quiet --branch $tag --depth 1 https://github.com/ONLYOFFICE/server.git      /build/server
 
-COPY Makefile /build/server
-COPY DocService/sources/server.js /build/server/DocService/sources
-COPY FileConverter/sources/convertermaster.js /build/server/FileConverter/sources
-COPY Common/sources/license.js /build/server/Common/sources
-COPY Common/sources/constants.js /build/server/Common/sources
+COPY server/Makefile /build/server
+COPY server/DocService/sources/server.js /build/server/DocService/sources
+COPY server/FileConverter/sources/convertermaster.js /build/server/FileConverter/sources
+COPY server/Common/sources/license.js /build/server/Common/sources
+COPY server/Common/sources/constants.js /build/server/Common/sources
 
 # COPY server.patch /build/server.patch
 # RUN cd /build/server   && git apply /build/server.patch
