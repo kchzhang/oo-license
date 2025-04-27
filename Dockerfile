@@ -1,5 +1,5 @@
-ARG product_version=8.3.3
-ARG build_number=18
+ARG product_version=7.1.0
+ARG build_number=215
 ARG oo_root='/var/www/onlyoffice/documentserver'
 
 ## Setup
