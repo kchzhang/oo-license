@@ -4,7 +4,7 @@ ARG oo_root='/var/www/onlyoffice/documentserver'
 
 ## Setup
 
-FROM onlyoffice/documentserver:${product_version}.${build_number} as setup-stage
+FROM onlyoffice/documentserver:${product_version} as setup-stage
 ARG product_version
 ARG build_number
 ARG oo_root
@@ -40,7 +40,7 @@ RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/DocServ
 
 
 ## Final image
-FROM onlyoffice/documentserver:${product_version}.${build_number}
+FROM onlyoffice/documentserver:${product_version}
 ARG oo_root
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
