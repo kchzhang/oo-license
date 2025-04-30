@@ -1,5 +1,5 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2019
+ * (c) Copyright Ascensio System SIA 2010-2024
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
@@ -12,7 +12,7 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
  * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
  *
- * You can contact Ascensio System SIA at 20A-12 Ernesta Birznieka-Upisha
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
  * street, Riga, Latvia, EU, LV-1050.
  *
  * The  interactive user interfaces in modified source and object code versions
@@ -30,45 +30,33 @@
  *
  */
 
-'use strict';
+const { describe, test, expect } = require('@jest/globals');
+const config = require('../../Common/node_modules/config');
 
-const constants = require('./constants');
+const operationContext = require('../../Common/sources/operationContext');
+const utils = require('../../Common/sources/utils');
 
-const buildDate = '6/29/2016';
-const oBuildDate = new Date(buildDate);
+const ctx = new operationContext.Context();
+const minimumIterationsByteLength = 4;
 
 
-exports.readLicense = function*() {
-	const c_LR = constants.LICENSE_RESULT;
-	var now = new Date();
-	var startDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));//first day of current month
-	return [{
-		count: 1,
-		type: c_LR.Success,
-		light: false,
-		// packageType: constants.PACKAGE_TYPE_OS,
-		packageType: constants.PACKAGE_TYPE_I,
-		mode: constants.LICENSE_MODE.None,
-		// branding: false,
-		branding: true,
-		connections: constants.LICENSE_CONNECTIONS,
-		// customization: false,
-		// usersCount: 0,
-		customization: true,
-		usersCount: constants.LICENSE_CONNECTIONS,
-		usersExpire: constants.LICENSE_EXPIRE_USERS_ONE_DAY,
-		// hasLicense: false,
-		// plugins: false,
-		hasLicense: true,
-		plugins: true,
-		buildDate: oBuildDate,
-		startDate: startDate,
-		// endDate: null,
-		// customerId: ""
-		customerId: "",
-		endDate: new Date("2099-01-01T23:59:59.000Z")
-	}, null];
-};
+describe('AES encryption & decryption', function () {
+  test('Iterations range', async function () {
+    const configuration = config.get('aesEncrypt.config');
+    const encrypted = await utils.encryptPassword(ctx, 'secretstring');
+    const { iterationsByteLength = 5 } = configuration;
 
-// exports.packageType = constants.PACKAGE_TYPE_OS;
-exports.packageType = constants.PACKAGE_TYPE_I;
+    const [iterationsHex] = encrypted.split(':');
+    const iterations = parseInt(iterationsHex, 16);
+
+    const iterationsLength = iterationsByteLength < minimumIterationsByteLength ? minimumIterationsByteLength : iterationsByteLength;
+    expect(iterations).toBeGreaterThanOrEqual(Math.pow(10, iterationsLength - 1));
+    expect(iterations).toBeLessThanOrEqual(Math.pow(10, iterationsLength) - 1);
+  });
+
+  test('Correct workflow', async function () {
+      const encrypted = await utils.encryptPassword(ctx, 'secretstring');
+      const decrypted = await utils.decryptPassword(ctx, encrypted);
+      expect(decrypted).toEqual('secretstring');
+  });
+});

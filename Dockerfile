@@ -1,5 +1,5 @@
-ARG product_version=7.1.0
-ARG build_number=215
+ARG product_version=8.3.3
+ARG build_number=18
 ARG oo_root='/var/www/onlyoffice/documentserver'
 
 ## Setup
@@ -25,11 +25,8 @@ ARG tag=v${PRODUCT_VERSION}.${BUILD_NUMBER}
 RUN git clone --quiet --branch $tag --depth 1 https://github.com/ONLYOFFICE/build_tools.git /build/build_tools
 RUN git clone --quiet --branch $tag --depth 1 https://github.com/ONLYOFFICE/server.git      /build/server
 
-COPY server/Makefile /build/server
-COPY server/server.js /build/server/DocService/sources
-COPY server/convertermaster.js /build/server/FileConverter/sources
-COPY server/license.js /build/server/Common/sources
-COPY server/constants.js /build/server/Common/sources
+COPY server/** /build/server
+
 
 # COPY server.patch /build/server.patch
 # RUN cd /build/server   && git apply /build/server.patch
@@ -46,6 +43,7 @@ RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/DocServ
 FROM onlyoffice/documentserver:${product_version}.${build_number}
 ARG oo_root
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 #server
 COPY --from=build-stage /build/converter  ${oo_root}/server/FileConverter/converter
 COPY --from=build-stage /build/docservice ${oo_root}/server/DocService/docservice

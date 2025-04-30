@@ -87,7 +87,6 @@ DEBUG = $(BRANDING_DIR)/debug.js
 .PHONY: all clean install uninstall build-date
 
 .NOTPARALLEL:
-# all: $(SPELLCHECKER_DICTIONARIES) $(TOOLS) $(SCHEMA) $(CORE_FONTS) $(DOCUMENT_TEMPLATES) $(LICENSE) $(WELCOME) $(INFO) build-date
 all: $(SCHEMA) $(LICENSE) $(WELCOME) $(INFO) build-date
 
 build-date: $(GRUNT_FILES)
