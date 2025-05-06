@@ -12,11 +12,12 @@ ENV PRODUCT_VERSION=${product_version}
 ENV BUILD_NUMBER=${build_number}
 
 
-ARG build_deps="git make g++ nodejs npm"
+ARG build_deps="git make g++ nodejs bzip2"
+RUN apt-get update  
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt-get update && apt-get install -y ${build_deps}
+RUN apt update
+RUN apt-get install -y ${build_deps}
 RUN npm install -g pkg grunt grunt-cli
-WORKDIR /build
 
 
 ## Clone
