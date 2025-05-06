@@ -13,6 +13,7 @@ ENV BUILD_NUMBER=${build_number}
 
 
 ARG build_deps="git make g++ nodejs npm"
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get update && apt-get install -y ${build_deps}
 RUN npm install -g pkg grunt grunt-cli
 WORKDIR /build
@@ -40,8 +41,8 @@ COPY server/DocService/package.json /build/server/DocService
 FROM clone-stage as build-stage
 WORKDIR /build/server
 RUN make
-RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/FileConverter --targets=node14-linux -o /build/converter
-RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/DocService --targets=node14-linux --options max_old_space_size=4096 -o /build/docservice
+RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/FileConverter --targets=node16-linux -o /build/converter
+RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/DocService --targets=node16-linux --options max_old_space_size=4096 -o /build/docservice
 
 
 ## Final image
