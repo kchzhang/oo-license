@@ -35,8 +35,8 @@ COPY server/DocService/package.json /build/server/DocService
 FROM clone-stage as build-stage
 WORKDIR /build/server
 RUN make
-RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/FileConverter --targets=node16-linux-arm64 -o /build/converter
-RUN pkg /build/build_tools/out/linux_64/onlyoffice/documentserver/server/DocService --targets=node16-linux-arm64 --options max_old_space_size=4096 -o /build/docservice
+RUN pkg /build/build_tools/out/linux_/onlyoffice/documentserver/server/FileConverter --targets=node16-linux-arm64 -o /build/converter
+RUN pkg /build/build_tools/out/linux_/onlyoffice/documentserver/server/DocService --targets=node16-linux-arm64 --options max_old_space_size=4096 -o /build/docservice
 
 
 ## Final image
