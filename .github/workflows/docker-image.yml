@@ -2,7 +2,7 @@ name: Publish Docker image
 
 on:
   push:
-    branches: [demo]
+    # branches: [main]
     tags:
       - 'v*'
 
@@ -25,13 +25,6 @@ jobs:
           # registry: index.docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Log in to Docker ALIYUN Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          registry: ${{ secrets.DOCKER_ALIYUN_REGISTRY }}
-          username: ${{ secrets.DOCKER_ALIYUN_USERNAME }}
-          password: ${{ secrets.DOCKER_ALIYUN_PASSWORD }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
